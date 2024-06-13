@@ -57,49 +57,58 @@ stages = [r'''
 =========
 ''']
 
-quit_game = False
+
 end_of_game = False
 lives = 6
 word_list = ["algorithm", "arrays", "dictionary", "programming",
                 "coding", "python", "strings"]
 
-chosen_word=random.choice(word_list)
+def generate_random_word():
+    return random.choice(word_list)
 
-word_length = len(chosen_word)
+chosen_word=generate_random_word()
 
-display=[]
-for i in range(word_length):
-    display += "_"
+def create_display():
+    word_length = len(chosen_word)
+    display=[]
+    for _ in range(word_length):
+        display += "_"
+    return display
+
+def random_word_arrray():
+    word_length = len(chosen_word)
+    letters=[]
+    for i in range(word_length):
+        letters+=chosen_word[i]
+    return letters
 
 
 answer=input("Would you like to play? Type Y/y for yes, N/n for no ")
+letter_array=random_word_arrray()
+display_underscores=create_display()
 
-while not quit_game:
-    
+while not end_of_game:
     if answer.lower()=="y":
-
+        
         guess = input("Guess a letter: ").lower()
-        if guess not in display:
-            for position in range(word_length):
+        if guess not in display_underscores:
+            for position in range(len(chosen_word)):
                 letter = chosen_word[position]
                 if letter == guess:
-                    display[position] = letter
+                    display_underscores[position]= letter
             if guess not in chosen_word:
                 lives-=1
-                
-            print(f"{''.join(display)}")
-            if "_" not in display:
+                if lives == 0:
+                    end_of_game = True
+                    print("You lose. :(")
+                    
+            print(f"{' '.join(display_underscores)}")
+            
+            if "_" not in display_underscores:
                 end_of_game == True
                 print("You win.")
+
             print (stages[lives])
-            if lives == 0:
-                print("You lose. :(")
-                end_of_game == True
-                quit_choice=input("Do you want to play again Y/y or N/n?")
-                if quit_choice.lower() == "n":
-                    quit_game==True
-                elif quit_choice.lower() == "y":
-                    quit_game==False
     elif answer.lower()=="n":
-        quit_game==True
+        end_of_game==True
 
